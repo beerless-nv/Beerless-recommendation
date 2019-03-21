@@ -19,13 +19,12 @@ class KnnRecommender:
     def _prep_data(self):
         #Get model, hashmap and data
         #Connect to GCP bucket
-        credentials = 
-        client = storage.Client(credentials=credentials)
+        client = storage.Client()
         bucket = client.get_bucket("beerless-scripts-1.appspot.com")
 
         #Model
-        beerIDPickle = bucket.blob("beerID.pickle")
-        model = pickle.loads(beerIDPickle.download_as_string())
+        modelPickle = bucket.blob("model.pickle")
+        model = pickle.loads(modelPickle.download_as_string())
         
 
         #Data
@@ -33,8 +32,8 @@ class KnnRecommender:
         data = pickle.loads(dataPickle.download_as_string())
 
         #Tastingprofiles
-        modelPickle = bucket.blob("model.pickle")
-        df_tastingprofiles = pickle.loads(modelPickle.download_as_string())
+        beerIdPickle = bucket.blob("beerID.pickle")
+        df_tastingprofiles = pickle.loads(beerIdPickle.download_as_string())
 
         return model, data, df_tastingprofiles
         

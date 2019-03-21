@@ -26,10 +26,9 @@ class LoadModel:
         #print(df_tastingprofile_features)
 
         #Configuring Google Cloud storage
-        credentials = app_engine.Credentials()
-        client = storage.Client(credentials=credentials)
+        client = storage.Client()
         bucket = client.get_bucket("beerless-scripts-1.appspot.com")
-        beerIDPickle = bucket.blob("beerIDPickle")
+        beerIDPickle = bucket.blob("beerID.pickle")
 
         beerIDPickle.upload_from_string(pickle.dumps(df_tastingprofiles, protocol=pickle.HIGHEST_PROTOCOL))
 
@@ -37,7 +36,7 @@ class LoadModel:
         mat_tastingprofile_features = csr_matrix(df_tastingprofile_features.values)
         
         #Saving data
-        dataPickle = bucket.blob("dataPickle")
+        dataPickle = bucket.blob("data.pickle")
         dataPickle.upload_from_string(pickle.dumps(mat_tastingprofile_features, protocol=pickle.HIGHEST_PROTOCOL))
 
         #creating models
@@ -52,7 +51,7 @@ class LoadModel:
         print(model)
 
         #saving model to file
-        modelPickle = bucket.blob("modelPickle")
+        modelPickle = bucket.blob("model.pickle")
         modelPickle.upload_from_string(pickle.dumps(model, protocol=pickle.HIGHEST_PROTOCOL))
             
 
