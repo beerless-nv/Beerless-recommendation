@@ -4,6 +4,6 @@ manual_scaling:
   instances: 1
 
 handlers:
-  url: /loadModel
-  script: LoadModel.py
+- url: /loadModel
+  script: auto
   login: admin
