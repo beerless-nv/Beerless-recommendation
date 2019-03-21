@@ -145,8 +145,14 @@ def getRecommendation():
 
 @app.route("/loadModel")
 def load():
-    LoadModel.LoadModel.load()
-    return "Done"
+    headerCron = request.headers.get('X-AppEngine-Cron')
+    print(headerCron)
+    if headerCron is None:
+        return 'Authorized Access Only!'
+    else:
+        LoadModel.LoadModel.load()
+        return "Done"
+            
 
 
 if __name__ == '__main__':
