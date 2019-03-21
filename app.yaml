@@ -2,3 +2,8 @@ runtime: python37
 
 manual_scaling:
   instances: 1
+
+handlers:
+  url: /loadModel
+  script: LoadModel.py
+  login: admin

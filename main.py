@@ -8,6 +8,7 @@ from sklearn.neighbors import NearestNeighbors
 from fuzzywuzzy import fuzz
 import pickle
 import sys
+import LoadModel
 from flask import Flask, request
 
 
@@ -141,6 +142,11 @@ def getRecommendation():
     recommender = KnnRecommender()
     # make recommendations
     return recommender.make_recommendations(beerId, amount)
+
+@app.route("/loadModel")
+def load():
+    LoadModel.LoadModel.load()
+    return "Done"
 
 
 if __name__ == '__main__':
