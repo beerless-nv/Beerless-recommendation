@@ -9,6 +9,7 @@ from fuzzywuzzy import fuzz
 import pickle
 import sys
 import LoadModel
+from google.cloud import storage
 from flask import Flask, request
 
 
@@ -16,17 +17,22 @@ from flask import Flask, request
 class KnnRecommender:
     def _prep_data(self):
         #Get model, hashmap and data
+        #Connect to GCP bucket
+        client = storage.Client()
+        bucket = client.get_bucket("beerless-scripts-1")
+
         #Model
-        with open('model.pickle', 'rb') as handle:
-            model = pickle.load(handle)
+        beerIDPickle = bucket.blob("beerIDPickle")
+        model = pickle.loads(beerIDPickle.download_as_string())
+        
 
         #Data
-        with open('data.pickle', 'rb') as handle:
-            data = pickle.load(handle)
+        dataPickle = bucket.blob("dataPickle")
+        data = pickle.loads(dataPickle.download_as_string())
 
         #Tastingprofiles
-        with open('beerID.pickle', 'rb') as handle:
-            df_tastingprofiles = pickle.load(handle)
+        modelPickle = bucket.blob("modelPickle")
+        df_tastingprofiles = pickle.loads(modelPickle.download_as_string())
 
         return model, data, df_tastingprofiles
         

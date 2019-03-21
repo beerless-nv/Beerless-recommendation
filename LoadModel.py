@@ -9,6 +9,7 @@ from fuzzywuzzy import fuzz
 import pickle
 import requests
 import json
+from google.cloud import storage
 
 class LoadModel:
     def load():
@@ -24,15 +25,19 @@ class LoadModel:
         df_tastingprofile_features = df_tastingprofiles.set_index('beerId')   
         #print(df_tastingprofile_features) 
 
-        with open('beerID.pickle','wb') as handle:
-            pickle.dump(df_tastingprofiles, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        #Configuring Google Cloud storage
+        client = storage.Client()
+        bucket = client.get_bucket("beerless-scripts-1")
+        beerIDPickle = bucket.blob("beerIDPickle")
+
+        beerIDPickle.upload_from_string(pickle.dumps(df_tastingprofiles, protocol=pickle.HIGHEST_PROTOCOL))
 
         #Creating matrix
         mat_tastingprofile_features = csr_matrix(df_tastingprofile_features.values)
-
+        
         #Saving data
-        with open('data.pickle', 'wb') as handle:
-            pickle.dump(mat_tastingprofile_features, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        dataPickle = bucket.blob("dataPickle")
+        dataPickle.upload_from_string(pickle.dumps(mat_tastingprofile_features, protocol=pickle.HIGHEST_PROTOCOL))
 
         #creating models
         model = NearestNeighbors()
@@ -41,16 +46,13 @@ class LoadModel:
         model.set_params(n_neighbors=20, algorithm='brute', metric='cosine',n_jobs=-1)
 
 
-
         # fit
         model.fit(mat_tastingprofile_features)
 
         #saving model to file
-        with open('model.pickle', 'wb') as handle:
-            pickle.dump(model, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-
-
+        modelPickle = bucket.blob("modelPickle")
+        modelPickle.upload_from_string(pickle.dumps(model, protocol=pickle.HIGHEST_PROTOCOL))
+            
 
         # clean up
         del df_tastingprofiles, df_tastingprofile_features
