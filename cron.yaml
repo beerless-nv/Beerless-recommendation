@@ -1,5 +1,5 @@
 cron:
-  description: "Load Model & Pickle Files"
+- description: "Load Model & Pickle Files"
   url: /loadModel
   schedule: every 15 mins
 
