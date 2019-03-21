@@ -11,6 +11,7 @@ import sys
 import LoadModel
 from google.cloud import storage
 from flask import Flask, request
+from google.auth import app_engine
 
 
 
@@ -18,20 +19,21 @@ class KnnRecommender:
     def _prep_data(self):
         #Get model, hashmap and data
         #Connect to GCP bucket
-        client = storage.Client()
-        bucket = client.get_bucket("beerless-scripts-1")
+        credentials = app_engine.Credentials()
+        client = storage.Client(credentials=credentials)
+        bucket = client.get_bucket("beerless-scripts-1.appspot.com")
 
         #Model
-        beerIDPickle = bucket.blob("beerIDPickle")
+        beerIDPickle = bucket.blob("beerID.pickle")
         model = pickle.loads(beerIDPickle.download_as_string())
         
 
         #Data
-        dataPickle = bucket.blob("dataPickle")
+        dataPickle = bucket.blob("data.pickle")
         data = pickle.loads(dataPickle.download_as_string())
 
         #Tastingprofiles
-        modelPickle = bucket.blob("modelPickle")
+        modelPickle = bucket.blob("model.pickle")
         df_tastingprofiles = pickle.loads(modelPickle.download_as_string())
 
         return model, data, df_tastingprofiles

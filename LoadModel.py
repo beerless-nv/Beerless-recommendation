@@ -10,6 +10,7 @@ import pickle
 import requests
 import json
 from google.cloud import storage
+from google.auth import app_engine
 
 class LoadModel:
     def load():
@@ -23,11 +24,12 @@ class LoadModel:
 
         # pivot and create tastingprofile matrix
         df_tastingprofile_features = df_tastingprofiles.set_index('beerId')   
-        #print(df_tastingprofile_features) 
+        #print(df_tastingprofile_features)
 
         #Configuring Google Cloud storage
-        client = storage.Client()
-        bucket = client.get_bucket("beerless-scripts-1")
+        credentials = app_engine.Credentials()
+        client = storage.Client(credentials=credentials)
+        bucket = client.get_bucket("beerless-scripts-1.appspot.com")
         beerIDPickle = bucket.blob("beerIDPickle")
 
         beerIDPickle.upload_from_string(pickle.dumps(df_tastingprofiles, protocol=pickle.HIGHEST_PROTOCOL))
