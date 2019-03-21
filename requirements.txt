@@ -1,0 +1,5 @@
+Flask
+pandas
+scipy
+sklearn
+fuzzywuzzy
