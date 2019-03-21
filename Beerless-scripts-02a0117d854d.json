@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "beerless-scripts-1",
+  "private_key_id": "02a0117d854d474be84b0b6a1b42719c8624b797",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC2rR7VH50tpxLj\nx3TyiuCz57ahpbZeJ7a2idNHig/QGg3plPBZNlPDvsE3NsM40ljw4XgZ2tX5sCRa\n07IJfHzMFl9qgUGJAw+FSvh9yXd/eP/kVZqQpGp7g2fsSNXNoCWM1H9ua48P2LGe\njm4S1WW7LQG2jJC57kocX0m5mFNdRwYrNVJTVwtjqq9LzOeS1p1htASmp6crXbaj\nHkIFlQSaUMHlpjBJNeQnAYJmXPCwmK36DAO6xIB3WeApu0H9MbnQ03gq4CoE3QXp\nW5yVG9wxP8qeVRfB6KaaurFRTJZUGQwMOIzr/kNXNWMrlU65tBS/WKvD2vfq4dxf\n6K3YpYHNAgMBAAECggEACvdbE7u9XY17UJG7d0j3gs1M9SjDySS0rwIYnSGQX/OE\ndMqEYDKm9igIJNakgw97l+BNK64rrLzSfeJZ/IBM5JqOOVBPnRhCMQQGZVS4F/6t\nS+mIqRi5rLb/gNuBfEHaJzllef06fh7J0OUnfflyDTm/MdR/5q2DpO7id+IJVR7R\nhkCzvApw5h99gfsodvtY5g45GxDnqHDx9h66MtLbv4Uz4jElz0zICvXvWnhg2h5N\nx2mdCYnuuJJ/C6tBdRvmInY4FTHOhXunNpqR7DKG3tD1BIlxIdGoniBaJoheOWBV\nnJ4ka7Z3kGLkfUzwJJhVosbvBfcnCxIna0BcWePuIQKBgQDw34n9iFpM8X5vMBes\ngefMxuEzzRokbRsqgBDlKH6kXthHJo8CEiDTeCYke0JJ/BQBrWOSniMQFWeu0mx8\nhvGq0gYF0BJSt0lIeDNpwEIpZGaTg0B/IGzSYjf35r74Cz1oDZqVWE5iTvwXRfA2\n0v6uEZB4oe1X8V5y8GDubZ9Z7QKBgQDCJfaFG4gxJKp6Fkvezf0OfgW0vLnsIia8\ni2EFgR/GFyHpIKkM1n8wB+PKCaOiXKoHmCEiBrAYZFbprCOKZ1/5wlicgldNf9T9\n9UMrDfPFSkgF9l4Y+tZ9xgXOIdIJ3HsT/6yWx3DfqLAvymsBlIb1e6hcdVHZBrF/\ngBrUshxLYQKBgQDEt5uHnps46aU7g0hiT3mS6P21A5WNGDoufIbP0EGVVgxGF3yF\n0W5TpnVoJ+4cZC2mrQd8D4BNO14BDcMh9EdcHchjaOn9+ch00g4TGLwv99o6MOA0\nsrONIj/ZSu69vtg4qZuMyqDBcwY4r5qd+7WZTajyjDQ9NVfQgPZ44rhYhQKBgQCG\ncxXSPivFpJeuboxiIpKRm7JF5MB4h3n97iPlVPN1EgX41RZc/pob4AremmhIgxV4\npuCjGLCQY8RQlFYUfdxYMT9+O0FMOS9+I4A9a68aPIO+JUwqzmMFvMG+a2tySs6t\nHc0eqcVADijdH7eU44/GprkENnbU7a60Fjn+e83eYQKBgQDZHt4jOTjD9RS1O3G1\nHT1aLY4fjXFJJkI2Dh4IBY0fCAmuJqPpXbkTDuCbASlHByxw/NAPR6+VlCeqD7M4\nxkAGxJFWHFd4JRwHDy8uy2A0mVdhHgRiU4zWA9LT5kivk2ZbByNvDYT1SlJvFMIn\nHPMwUHJqcTyk/5dVhn6gQfYxAw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "beerless-scripts-1@appspot.gserviceaccount.com",
+  "client_id": "108897936046545940840",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/beerless-scripts-1%40appspot.gserviceaccount.com"
+}

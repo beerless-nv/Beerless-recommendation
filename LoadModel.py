@@ -20,7 +20,6 @@ class LoadModel:
         test = pd.DataFrame(x)
         #print(test.columns.values)
         df_tastingprofiles = test[['beerId', 'malty', 'sweet', 'sour', 'hoppy', 'bitter', 'fruity']]
-        df_tastingprofile_mean = df_tastingprofiles
 
         # pivot and create tastingprofile matrix
         df_tastingprofile_features = df_tastingprofiles.set_index('beerId')   
@@ -50,6 +49,7 @@ class LoadModel:
 
         # fit
         model.fit(mat_tastingprofile_features)
+        print(model)
 
         #saving model to file
         modelPickle = bucket.blob("modelPickle")

@@ -19,7 +19,7 @@ class KnnRecommender:
     def _prep_data(self):
         #Get model, hashmap and data
         #Connect to GCP bucket
-        credentials = app_engine.Credentials()
+        credentials = 
         client = storage.Client(credentials=credentials)
         bucket = client.get_bucket("beerless-scripts-1.appspot.com")
 
@@ -60,7 +60,6 @@ class KnnRecommender:
         # inference
         #print('Recommendation system start to make inference')
         #print('......\n')
-        t0 = time.time()
         distances, indices = model.kneighbors(
             data[idx],
             n_neighbors=n_recommendations+1)
@@ -160,8 +159,6 @@ def load():
     else:
         LoadModel.LoadModel.load()
         return "Done"
-            
-
 
 if __name__ == '__main__':
     app.run(debug=True)
