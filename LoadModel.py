@@ -48,7 +48,6 @@ class LoadModel:
 
         # fit
         model.fit(mat_tastingprofile_features)
-        print(model)
 
         #saving model to file
         modelPickle = bucket.blob("model.pickle")
