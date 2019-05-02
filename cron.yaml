@@ -1,5 +1,6 @@
 cron:
 - description: "Load Model & Pickle Files"
   url: /loadModel
-  schedule: every 24 hours
+  schedule: every day 03:00
+  timezone: Europe/Brussels
 

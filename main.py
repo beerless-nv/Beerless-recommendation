@@ -1,6 +1,3 @@
-import os
-import time
-import gc
 import argparse
 import pandas as pd
 from scipy.sparse import csr_matrix
@@ -12,32 +9,30 @@ import LoadModel
 from google.cloud import storage
 from flask import Flask, request
 from google.auth import app_engine
-
+import requests
 
 
 class KnnRecommender:
     def _prep_data(self):
-        #Get model, hashmap and data
-        #Connect to GCP bucket
+        # Get model, hashmap and data
+        # Connect to GCP bucket
         client = storage.Client()
         bucket = client.get_bucket("beerless-scripts-1.appspot.com")
 
-        #Model
+        # Model
         modelPickle = bucket.blob("model.pickle")
         model = pickle.loads(modelPickle.download_as_string())
-        
 
-        #Data
+        # Data
         dataPickle = bucket.blob("data.pickle")
         data = pickle.loads(dataPickle.download_as_string())
 
-        #Tastingprofiles
+        # Tastingprofiles
         beerIdPickle = bucket.blob("beerID.pickle")
         df_tastingprofiles = pickle.loads(beerIdPickle.download_as_string())
 
         return model, data, df_tastingprofiles
-        
-    
+
     def _inference(self, model, data, idx, n_recommendations):
         """
         return top n similar beer recommendations based on user's input movie
@@ -52,16 +47,13 @@ class KnnRecommender:
         ------
         list of top n similar beer recommendations
         """
-        #Removing duplicate recommendation
-        n_recommendations = n_recommendations +1
-
+        # Removing duplicate recommendation
+        n_recommendations = (n_recommendations * 2) + 1
 
         # inference
-        #print('Recommendation system start to make inference')
-        #print('......\n')
         distances, indices = model.kneighbors(
             data[idx],
-            n_neighbors=n_recommendations+1)
+            n_neighbors=n_recommendations +1)
 
         # get list of raw idx of recommendations
         raw_recommends = \
@@ -74,10 +66,6 @@ class KnnRecommender:
                 ),
                 key=lambda x: x[1]
             )[:0:-1]
-
-        #print('It took my system {:.2f}s to make inference \n\
-        #     '.format(time.time() - t0))
-        # return recommendation (beerID, distance)
 
         return raw_recommends
 
@@ -93,74 +81,84 @@ class KnnRecommender:
         # get data
         model, data, df_tastingprofiles = self._prep_data()
 
-        #get index of beerId
-        beerindex = int(df_tastingprofiles[df_tastingprofiles['beerId'] == idx].index.values)
-        #print('test beerindex vinden')
-        #print(beerindex)
-        
-        # get recommendations
-        raw_recommends = self._inference(
-            model, data, beerindex, n_recommendations)
+        if(df_tastingprofiles[df_tastingprofiles['beerId'] == idx].index.values > -1):
 
-        #print(raw_recommends)
+            # get index of beerId
+            beerindex = int(
+                df_tastingprofiles[df_tastingprofiles['beerId'] == idx].index.values)
 
-        #Sorting Raw Recommendations
-        def sortSecond(val):
-            return val[1]
+            # get recommendations
+            raw_recommends = self._inference(
+                model, data, beerindex, n_recommendations)
 
-        raw_recommends.sort(key = sortSecond)
+            # Sorting Raw Recommendations
+            def sortSecond(val):
+                return val[1]
 
-        #Remove extra
-        #print("test raw_recommends remove")
-        for beer in raw_recommends:
-            if beer[0] == beerindex:
-                raw_recommends.remove(beer)
+            raw_recommends.sort(key=sortSecond)
 
-        #Remove extra if still longer
-        if len(raw_recommends) > n_recommendations:
-            del raw_recommends[-1]
-        
-        #Create object to return
-        beerAPI = pd.DataFrame(columns=('beerId','distance'))
+            # Create object to return
+            beerAPI = []
 
-        #print('Recommendations for {}:'.format(idx))
-        teller = 1
-        for beer in raw_recommends:
-            beerID = int(df_tastingprofiles.iloc[beer[0]].beerId)
-            beerAPI.loc[teller, 'beerId'] =  int(beerID)
-            beerAPI.loc[teller, 'distance'] = beer[1]
-            teller = teller + 1
-        return beerAPI.to_json(orient='records')
+            # Run through every recommend
+            for beer in raw_recommends:
+                beerID = int(df_tastingprofiles.iloc[beer[0]].beerId)
+
+                #  Check if beer in recommendations = rec beer
+                if beer[0] != beerindex:
+                    beerAPI.append({
+                        'beerId': beerID,
+                        'distance': beer[1]
+                    })
+
+            # Return object
+            beerAPIresult = pd.DataFrame(beerAPI)
+            return beerAPIresult.to_json(orient='records')
+        else:
+            test = []
+            response = pd.DataFrame(test)
+            return response.to_json(orient='records')
+
 
 app = Flask(__name__)
+
 
 @app.route("/")
 def hello():
     return "Beerless API"
 
+
 @app.route("/itemBasedRecommendation", methods=['GET'])
 def getRecommendation():
-    #Get ARgs
+    # Get ARgs
     beerId = int(request.args['beerId'])
     amount = int(request.args['amount'])
 
-    #initial recommender system
-    recommender = KnnRecommender()
-    # make recommendations
-    return recommender.make_recommendations(beerId, amount)
+    # Check if beerId exists
+    # Call to API to check beer
+    baseUri = "https://api.beerless.be/api/beers/{}".format(beerId)
+    result = requests.get(baseUri)
+    if result.status_code == 200:
+        # initial recommender system
+        recommender = KnnRecommender()
+        # make recommendations
+        return recommender.make_recommendations(beerId, amount)
+    else:
+        test = []
+        response = pd.DataFrame(test)
+        return "YOLO MCSWAGGINS"
+
 
 @app.route("/loadModel")
 def load():
     headerCron = request.headers.get('X-AppEngine-Cron')
-    print(headerCron)
     if headerCron is None:
         return 'Authorized Access Only!'
     else:
         LoadModel.LoadModel.load()
         return "Done"
 
+
 if __name__ == '__main__':
     app.run(debug=True)
     # get args
-    
-    
