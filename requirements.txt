@@ -4,3 +4,5 @@ scipy
 sklearn
 fuzzywuzzy
 google-cloud-storage
+requests
+python-dotenv

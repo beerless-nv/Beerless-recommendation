@@ -141,12 +141,13 @@ def getRecommendation():
     if result.status_code == 200:
         # initial recommender system
         recommender = KnnRecommender()
+
         # make recommendations
         return recommender.make_recommendations(beerId, amount)
     else:
         test = []
         response = pd.DataFrame(test)
-        return "YOLO MCSWAGGINS"
+        return response
 
 
 @app.route("/loadModel")
@@ -160,5 +161,5 @@ def load():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
     # get args
